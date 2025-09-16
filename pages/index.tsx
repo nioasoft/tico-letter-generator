@@ -527,7 +527,7 @@ const MeetingScheduler = () => {
                 />
                 <User className="w-3 h-3 text-green-600" />
                 <Building className="w-3 h-3 text-blue-600" />
-                <span className="text-xs">יחיד + חברה</span>
+                <span className="text-xs">בעל שליטה + חברה</span>
               </label>
 
               <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
@@ -540,7 +540,7 @@ const MeetingScheduler = () => {
                 />
                 <User className="w-3 h-3 text-green-600" />
                 <Building2 className="w-3 h-3 text-blue-600" />
-                <span className="text-xs">יחיד + חברות</span>
+                <span className="text-xs">בעל שליטה + חברות</span>
               </label>
 
               <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
@@ -553,7 +553,7 @@ const MeetingScheduler = () => {
                 />
                 <Users className="w-3 h-3 text-green-600" />
                 <Building className="w-3 h-3 text-blue-600" />
-                <span className="text-xs">רבים + חברה</span>
+                <span className="text-xs">בעלי שליטה + חברה</span>
               </label>
 
               <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
@@ -566,7 +566,7 @@ const MeetingScheduler = () => {
                 />
                 <Users className="w-3 h-3 text-green-600" />
                 <Building2 className="w-3 h-3 text-blue-600" />
-                <span className="text-xs">רבים + חברות</span>
+                <span className="text-xs">בעלי שליטה + חברות</span>
               </label>
             </div>
           </div>
