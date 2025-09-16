@@ -466,7 +466,7 @@ const MeetingScheduler = () => {
                   className="scale-90"
                 />
                 <Calendar className="w-3 h-3 text-blue-600" />
-                <span className="text-xs">פגישה</span>
+                <span className="text-xs">פגישה לדוחות מבוקרים</span>
               </label>
 
               <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
@@ -478,7 +478,7 @@ const MeetingScheduler = () => {
                   className="scale-90"
                 />
                 <FileText className="w-3 h-3 text-green-600" />
-                <span className="text-xs">חתך</span>
+                <span className="text-xs">שיחת חתך עסקית</span>
               </label>
 
               <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
@@ -490,7 +490,7 @@ const MeetingScheduler = () => {
                   className="scale-90"
                 />
                 <FileText className="w-3 h-3 text-purple-600" />
-                <span className="text-xs">כללי</span>
+                <span className="text-xs">מכתב כללי</span>
               </label>
             </div>
           </div>
