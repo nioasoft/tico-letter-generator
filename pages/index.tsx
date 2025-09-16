@@ -467,7 +467,7 @@ const MeetingScheduler = () => {
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-blue-600" />
                 </div>
-                <span className="text-sm">הזמנה לפגישה</span>
+                <span className="text-sm">הזמנה לפגישה לדוחות מבוקרים</span>
               </label>
               
               <label className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
