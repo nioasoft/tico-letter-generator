@@ -448,46 +448,49 @@ const MeetingScheduler = () => {
             <p className="text-sm text-gray-600">עבור משרד פרנקו ושות&apos; בע&quot;מ</p>
           </div>
 
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-gray-800 mb-3" style={{textAlign: 'right'}}>📝 פרטי המכתב</h2>
+        <div className="space-y-3">
+          <h2 className="text-base font-semibold text-gray-700 mb-2" style={{textAlign: 'right'}}>הגדרות המכתב</h2>
           
           {/* Letter Type */}
           <div style={{textAlign: 'right'}}>
             <label className="block text-sm font-medium text-gray-700 mb-2" style={{textAlign: 'right'}}>
               סוג המכתב *
             </label>
-            <div className="grid grid-cols-2 gap-2" style={{direction: 'rtl'}}>
-              <label className="flex items-center gap-2 p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
+            <div className="grid grid-cols-3 gap-2" style={{direction: 'rtl'}}>
+              <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
                 <input
                   type="radio"
                   value="meeting"
                   checked={letterType === 'meeting'}
                   onChange={(e) => setLetterType(e.target.value)}
+                  className="scale-90"
                 />
-                <Calendar className="w-4 h-4 text-blue-600" />
-                <span className="text-xs">הזמנה לפגישה לדוחות</span>
+                <Calendar className="w-3 h-3 text-blue-600" />
+                <span className="text-xs">פגישה</span>
               </label>
 
-              <label className="flex items-center gap-2 p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
+              <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
                 <input
                   type="radio"
                   value="cross_section"
                   checked={letterType === 'cross_section'}
                   onChange={(e) => setLetterType(e.target.value)}
+                  className="scale-90"
                 />
-                <FileText className="w-4 h-4 text-green-600" />
-                <span className="text-xs">שיחת חתך עסקית</span>
+                <FileText className="w-3 h-3 text-green-600" />
+                <span className="text-xs">חתך</span>
               </label>
 
-              <label className="flex items-center gap-2 p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer col-span-2" style={{flexDirection: 'row'}}>
+              <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
                 <input
                   type="radio"
                   value="general"
                   checked={letterType === 'general'}
                   onChange={(e) => setLetterType(e.target.value)}
+                  className="scale-90"
                 />
-                <FileText className="w-4 h-4 text-purple-600" />
-                <span className="text-xs">מכתב כללי</span>
+                <FileText className="w-3 h-3 text-purple-600" />
+                <span className="text-xs">כללי</span>
               </label>
             </div>
           </div>
@@ -514,60 +517,56 @@ const MeetingScheduler = () => {
               סוג לקוח *
             </label>
             <div className="grid grid-cols-2 gap-2" style={{direction: 'rtl'}}>
-              <label className="flex items-center gap-2 p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
+              <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
                 <input
                   type="radio"
                   value="single_owner_single_company"
                   checked={clientType === 'single_owner_single_company'}
                   onChange={(e) => setClientType(e.target.value)}
+                  className="scale-90"
                 />
-                <div className="flex items-center gap-1">
-                  <User className="w-3 h-3 text-green-600" />
-                  <Building className="w-3 h-3 text-blue-600" />
-                </div>
-                <span className="text-xs">יחיד + חברה אחת</span>
+                <User className="w-3 h-3 text-green-600" />
+                <Building className="w-3 h-3 text-blue-600" />
+                <span className="text-xs">יחיד + חברה</span>
               </label>
 
-              <label className="flex items-center gap-2 p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
+              <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
                 <input
                   type="radio"
                   value="single_owner_multiple_companies"
                   checked={clientType === 'single_owner_multiple_companies'}
                   onChange={(e) => setClientType(e.target.value)}
+                  className="scale-90"
                 />
-                <div className="flex items-center gap-1">
-                  <User className="w-3 h-3 text-green-600" />
-                  <Building2 className="w-3 h-3 text-blue-600" />
-                </div>
-                <span className="text-xs">יחיד + מספר חברות</span>
+                <User className="w-3 h-3 text-green-600" />
+                <Building2 className="w-3 h-3 text-blue-600" />
+                <span className="text-xs">יחיד + חברות</span>
               </label>
 
-              <label className="flex items-center gap-2 p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
+              <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
                 <input
                   type="radio"
                   value="multiple_owners_single_company"
                   checked={clientType === 'multiple_owners_single_company'}
                   onChange={(e) => setClientType(e.target.value)}
+                  className="scale-90"
                 />
-                <div className="flex items-center gap-1">
-                  <Users className="w-3 h-3 text-green-600" />
-                  <Building className="w-3 h-3 text-blue-600" />
-                </div>
-                <span className="text-xs">מספר בעלים + חברה</span>
+                <Users className="w-3 h-3 text-green-600" />
+                <Building className="w-3 h-3 text-blue-600" />
+                <span className="text-xs">רבים + חברה</span>
               </label>
 
-              <label className="flex items-center gap-2 p-2 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
+              <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
                 <input
                   type="radio"
                   value="multiple_owners_multiple_companies"
                   checked={clientType === 'multiple_owners_multiple_companies'}
                   onChange={(e) => setClientType(e.target.value)}
+                  className="scale-90"
                 />
-                <div className="flex items-center gap-1">
-                  <Users className="w-3 h-3 text-green-600" />
-                  <Building2 className="w-3 h-3 text-blue-600" />
-                </div>
-                <span className="text-xs">מספר בעלים + חברות</span>
+                <Users className="w-3 h-3 text-green-600" />
+                <Building2 className="w-3 h-3 text-blue-600" />
+                <span className="text-xs">רבים + חברות</span>
               </label>
             </div>
           </div>
@@ -576,7 +575,6 @@ const MeetingScheduler = () => {
           {getLetterTypeConfig().needsMeetings && (
           <div style={{textAlign: 'right'}}>
             <label className="block text-sm font-medium text-gray-700 mb-2" style={{textAlign: 'right'}}>
-              <Calendar className="w-4 h-4 inline ml-1" />
               מועדי פגישה * (2-4 אפשרויות)
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -603,33 +601,31 @@ const MeetingScheduler = () => {
           </div>
           )}
 
-          {/* Generate Button */}
-          <div className="flex justify-center">
+          {/* Generate Button and Validation */}
+          <div className="flex flex-col items-center gap-1">
+            <div className="text-center">
+              <p className="text-xs mb-1">
+                {!clientName ? (
+                  <span className="text-red-600">⚠ יש להזין שם לקוח</span>
+                ) : getLetterTypeConfig().needsMeetings ? (
+                  getValidMeetingsCount() < 2 ? (
+                    <span className="text-orange-600">⚠ יש להזין לפחות 2 מועדים</span>
+                  ) : (
+                    <span className="text-green-600">✓ {getValidMeetingsCount()} מועדים הוזנו</span>
+                  )
+                ) : (
+                  <span className="text-green-600">✓ מוכן ליצירה</span>
+                )}
+              </p>
+            </div>
             <button
               onClick={downloadHTML}
-              className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 flex items-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 flex items-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               disabled={!clientName || (getLetterTypeConfig().needsMeetings && getValidMeetingsCount() < 2)}
             >
               <Download className="w-4 h-4" />
               יצור והורד קובץ HTML
             </button>
-          </div>
-
-          {/* Validation Messages */}
-          <div className="text-center">
-            <p className="text-xs">
-              {!clientName ? (
-                <span className="text-red-600">⚠ יש להזין שם לקוח</span>
-              ) : getLetterTypeConfig().needsMeetings ? (
-                getValidMeetingsCount() < 2 ? (
-                  <span className="text-orange-600">⚠ יש להזין לפחות 2 מועדים</span>
-                ) : (
-                  <span className="text-green-600">✓ {getValidMeetingsCount()} מועדים הוזנו</span>
-                )
-              ) : (
-                <span className="text-green-600">✓ מוכן ליצירה</span>
-              )}
-            </p>
           </div>
         </div>
       </div>
