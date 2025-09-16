@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "name": "tico-letter-generator",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "regions": ["fra1"]
+}
