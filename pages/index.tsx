@@ -320,9 +320,9 @@ const MeetingScheduler = () => {
             font-family: ${isReminderLetter ?
               "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, 'Helvetica Neue', Arial, sans-serif" :
               "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"};
-            line-height: ${isReminderLetter ? '1.55' : '1.6'};
+            line-height: ${isReminderLetter ? '1.45' : '1.6'};
             margin: 0;
-            padding: ${isReminderLetter ? '20px 15px' : '15px'};
+            padding: ${isReminderLetter ? '15px 10px' : '15px'};
             background: ${isReminderLetter ? '#ffffff' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
             min-height: 100vh;
             direction: rtl;
@@ -343,11 +343,11 @@ const MeetingScheduler = () => {
         .header {
             background: ${isReminderLetter ? '#ffffff' : 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)'};
             color: ${isReminderLetter ? '#1d1d1f' : 'white'};
-            padding: ${isReminderLetter ? '20px 30px' : '18px'};
-            text-align: ${isReminderLetter ? 'right' : 'center'};
+            padding: ${isReminderLetter ? '20px 20px 15px' : '18px'};
+            text-align: ${isReminderLetter ? 'center' : 'center'};
             position: relative;
             overflow: hidden;
-            ${isReminderLetter ? 'border-bottom: 1px solid #d2d2d7;' : ''}
+            ${isReminderLetter ? 'border-bottom: 1px solid #cc0000;' : ''}
         }
         ${!isReminderLetter ? `
         .header::before {
@@ -365,15 +365,15 @@ const MeetingScheduler = () => {
             50% { transform: scale(1.1); opacity: 0.1; }
         }` : ''}
         .header h1 {
-            margin: 0;
-            font-size: ${isReminderLetter ? '20px' : '24px'};
+            margin: ${isReminderLetter ? '10px 0 0' : '0'};
+            font-size: ${isReminderLetter ? '18px' : '24px'};
             font-weight: ${isReminderLetter ? '600' : '700'};
             position: relative;
             z-index: 1;
-            ${isReminderLetter ? 'letter-spacing: -0.02em;' : ''}
+            ${isReminderLetter ? 'letter-spacing: -0.02em; text-align: center;' : ''}
         }
         .content {
-            padding: ${isReminderLetter ? '25px' : '20px'};
+            padding: ${isReminderLetter ? '20px' : '20px'};
             direction: rtl;
             text-align: right;
         }
@@ -381,22 +381,22 @@ const MeetingScheduler = () => {
             font-size: ${isReminderLetter ? '17px' : '18px'};
             font-weight: ${isReminderLetter ? '400' : '600'};
             color: ${isReminderLetter ? '#1d1d1f' : '#1f2937'};
-            margin-bottom: ${isReminderLetter ? '20px' : '15px'};
+            margin-bottom: ${isReminderLetter ? '15px' : '15px'};
             text-align: ${isReminderLetter ? 'right' : 'center'};
             ${isReminderLetter ? 'line-height: 1.8;' : ''}
         }
         .main-message {
             background: ${isReminderLetter ? '#f5f5f7' : 'linear-gradient(135deg, #fef3c7 0%, #fcd34d 20%, #f59e0b 100%)'};
-            padding: ${isReminderLetter ? '20px' : '15px'};
+            padding: ${isReminderLetter ? '15px' : '15px'};
             border-radius: ${isReminderLetter ? '8px' : '12px'};
-            margin: ${isReminderLetter ? '20px 0' : '15px 0'};
+            margin: ${isReminderLetter ? '15px 0' : '15px 0'};
             border-right: ${isReminderLetter ? 'none' : '4px solid #d97706'};
             border-left: ${isReminderLetter ? '3px solid #86868b' : 'none'};
             box-shadow: ${isReminderLetter ? 'none' : '0 3px 5px rgba(0,0,0,0.05)'};
             text-align: right;
         }
         .section {
-            margin: ${isReminderLetter ? '25px 0' : '20px 0'};
+            margin: ${isReminderLetter ? '20px 0' : '20px 0'};
             padding: ${isReminderLetter ? '0' : '15px'};
             background: ${isReminderLetter ? 'transparent' : '#f9fafb'};
             border-radius: ${isReminderLetter ? '0' : '10px'};
@@ -407,7 +407,7 @@ const MeetingScheduler = () => {
             font-size: ${isReminderLetter ? '18px' : '16px'};
             font-weight: ${isReminderLetter ? '600' : '700'};
             color: ${isReminderLetter ? '#1d1d1f' : '#1e40af'};
-            margin-bottom: ${isReminderLetter ? '15px' : '12px'};
+            margin-bottom: ${isReminderLetter ? '10px' : '12px'};
             display: ${isReminderLetter ? 'block' : 'flex'};
             align-items: center;
             gap: 6px;
@@ -416,9 +416,9 @@ const MeetingScheduler = () => {
         }
         .option {
             background: ${isReminderLetter ? '#ffffff' : 'white'};
-            padding: ${isReminderLetter ? '15px 0' : '12px'};
+            padding: ${isReminderLetter ? '10px 0' : '12px'};
             border-radius: ${isReminderLetter ? '0' : '8px'};
-            margin: ${isReminderLetter ? '15px 0' : '8px 0'};
+            margin: ${isReminderLetter ? '10px 0' : '8px 0'};
             border-right: ${isReminderLetter ? 'none' : '3px solid #10b981'};
             box-shadow: ${isReminderLetter ? 'none' : '0 2px 3px rgba(0,0,0,0.05)'};
             text-align: right;
@@ -428,15 +428,15 @@ const MeetingScheduler = () => {
             font-weight: ${isReminderLetter ? '500' : '600'};
             color: ${isReminderLetter ? '#1d1d1f' : '#065f46'};
             font-size: ${isReminderLetter ? '17px' : '15px'};
-            margin-bottom: ${isReminderLetter ? '10px' : '6px'};
+            margin-bottom: ${isReminderLetter ? '8px' : '6px'};
             text-align: right;
         }
         .option-details {
             color: ${isReminderLetter ? '#424245' : '#374151'};
             font-size: ${isReminderLetter ? '15px' : '13px'};
-            line-height: ${isReminderLetter ? '1.55' : '1.4'};
+            line-height: ${isReminderLetter ? '1.45' : '1.4'};
             text-align: right;
-            ${isReminderLetter ? 'padding-right: 20px;' : ''}
+            ${isReminderLetter ? 'padding-right: 15px;' : ''}
         }
         .meetings-section {
             background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
@@ -449,10 +449,10 @@ const MeetingScheduler = () => {
         .footer {
             background: ${isReminderLetter ? '#ffffff' : 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'};
             color: ${isReminderLetter ? '#1d1d1f' : 'white'};
-            padding: ${isReminderLetter ? '25px' : '18px'};
+            padding: ${isReminderLetter ? '20px' : '18px'};
             text-align: ${isReminderLetter ? 'right' : 'center'};
             font-weight: ${isReminderLetter ? '400' : '600'};
-            ${isReminderLetter ? 'border-top: 1px solid #d2d2d7; margin-top: 25px;' : ''}
+            ${isReminderLetter ? 'border-top: 1px solid #d2d2d7; margin-top: 20px;' : ''}
         }
         .highlight {
             background: ${isReminderLetter ? 'transparent' : 'linear-gradient(120deg, #fbbf24 0%, #f59e0b 100%)'};
@@ -481,6 +481,17 @@ const MeetingScheduler = () => {
 <body>
     <div class="container">
         <div class="header">
+            ${isReminderLetter ? `
+            <div style="margin-bottom: 15px;">
+                <svg width="180" height="70" viewBox="0 0 400 160" style="margin: 0 auto; display: block;">
+                    <rect width="400" height="160" fill="#ffffff"/>
+                    <text x="200" y="110" text-anchor="middle" style="font-family: Arial, sans-serif; font-weight: bold; font-size: 64px;">
+                        <tspan fill="#333333">TI</tspan><tspan fill="#cc0000">C</tspan><tspan fill="#333333">O</tspan>
+                    </text>
+                </svg>
+            </div>
+            <div style="color: #666; font-size: 14px; margin-top: -10px; margin-bottom: 15px; text-align: center;">FRANCO & CO - Certified Public Accountants (Isr.)</div>
+            ` : ''}
             <h1>${isReminderLetter ? letterConfig.title.replace('⚠️ ', '') : letterConfig.title}</h1>
         </div>
         
