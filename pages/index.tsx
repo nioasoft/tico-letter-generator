@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Calendar, Clock, Users, User, FileText, Download, Building, Building2 } from 'lucide-react';
+import { Calendar, Clock, Users, User, FileText, Download, Building, Building2, AlertCircle } from 'lucide-react';
 import Head from 'next/head';
 
 const MeetingScheduler = () => {
   const [clientName, setClientName] = useState('');
+  const [accountantName, setAccountantName] = useState('');
   const [clientType, setClientType] = useState('single_owner_single_company');
   const [letterType, setLetterType] = useState('meeting'); // New: letter type selection
   const [meetings, setMeetings] = useState([
@@ -176,6 +177,65 @@ const MeetingScheduler = () => {
           }
         };
       
+      case 'reminder':
+        return {
+          title: '⚠️ תזכורת נוספת - קבלת מסמכים לביקורת',
+          filename: 'מכתב זירוז',
+          needsMeetings: false,
+          content: {
+            greeting: `תזכורת נוספת – לקבלת מסמכי וגיבוי הנהלת חשבונות לשנת המס 2024 לצורך ביקורת ועריכת הדוחות הכספיים המבוקרים`,
+            mainMessage: `בהמשך לפנייתנו הקודמות אליכם בקשר לעניין שבנדון, אנו מזכירים ${clientConfig.waitingText} בזאת כי עדיין לא התקבל במשרדנו החומר הדרוש לביקורת ועריכת ${clientConfig.reportsText} לשנת המס 2024.<br><br>
+                         לנוכח העובדה שאנו נמצאים כבר בחודשים האחרונים של שנת המס 2025, עלול להיווצר עיכוב משמעותי שיגרום לקושי עבור${clientConfig.titleSuffix} ועבורנו להשלים במהירות את עבודת הביקורת ועריכת הדוחות הכספיים המבוקרים לשנת המס 2024.<br><br>
+                         ככל שתמהרו להמציא לנו את מסמכי הנהלת החשבונות לשנת המס 2024 כך נוכל למהר ולסיים את עבודת הביקורת והעריכה.`,
+            sections: [
+              {
+                title: `שימו לב:`,
+                options: [
+                  {
+                    title: '🏦 חשיבות הדוחות לבנק',
+                    details: `• הדוחות המבוקרים נדרשים בעיקר עבור הבנק שבו מתנהל חשבון הבנק של החברה<br>
+                             • במיוחד לשמירה על מסגרות האשראי הקיימות<br>
+                             • ובוודאי ובוודאי לטובת הגדלת מסגרות האשראי`
+                  }
+                ]
+              },
+              {
+                title: `הנחיות לביצוע:`,
+                options: [
+                  {
+                    title: '👥 בעלי המניות',
+                    details: `• אנא וודאו שמנהל/ת החשבונות מעביר/ה אלינו את כל הנדרש`
+                  },
+                  {
+                    title: `📋 למנהל/ת החשבונות`,
+                    details: `• אנא העבירי במהירות האפשרית את קבצי הנהלת החשבונות הדיגיטליים<br>
+                             • צרפי את כל מסמכי הראיות הנדרשים לביקורת<br>
+                             • לאחר העברת החומר, אנא הודיעי לתיקו ושני על כך`
+                  }
+                ]
+              },
+              {
+                title: `בקשה חשובה:`,
+                options: [
+                  {
+                    title: '⚡ העברה מיידית',
+                    details: `• אנו מבקשים להעביר את החומר כפי שהוא קיים אצל${clientConfig.titleSuffix}<br>
+                             • ללא עיכובים בשל חוסרים באישורים או מסמכים לא מהותיים<br>
+                             • ללא עיכוב בשל אי התאמה ביתרות לא מהותיות<br>
+                             • נטפל בכל החסרים הנדרשים במהלך עבודת הביקורת בשיתוף פעולה אית${clientConfig.titleSuffix}`
+                  },
+                  {
+                    title: '✅ לפני העברת החומר',
+                    details: `• <strong>שוב אנא, עובר להעברת הנדרש</strong><br>
+                             • אשרו לתיקו ושני בהודעת וואטסאפ<br>
+                             • כדי להכניס את התיק מייד לעבודה`
+                  }
+                ]
+              }
+            ]
+          }
+        };
+
       default:
         return getLetterTypeConfig.call(this, 'meeting');
     }
@@ -201,20 +261,44 @@ const MeetingScheduler = () => {
     const chooseText = letterConfig.needsMeetings ? `אנא ${config.chooseVerb} את המועד הכי נוח ${config.waitingText} ${config.updateVerb} אותי בהודעת וואטסאפ` : '';
     
     // Generate sections content
-    const sectionsHtml = letterConfig.content.sections.map(section => `
+    const sectionsHtml = letterConfig.content.sections.map(section => {
+      // Replace accountant name placeholders in the section title
+      let sectionTitle = section.title;
+      if (letterType === 'reminder' && accountantName) {
+        sectionTitle = sectionTitle.replace('[שם מנהל/ת החשבונות]', accountantName);
+      }
+
+      return `
       <div class="section">
         <div class="section-title">
           <span class="emoji">🚀</span>
-          ${section.title}
+          ${sectionTitle}
         </div>
-        ${section.options.map(option => `
+        ${section.options.map(option => {
+          // Replace accountant name placeholders in option title and details
+          let optionTitle = option.title;
+          let optionDetails = option.details;
+
+          if (letterType === 'reminder' && accountantName) {
+            optionTitle = optionTitle.replace('[שם מנהל/ת החשבונות]', accountantName);
+            optionDetails = optionDetails.replace(/\[שם מנהל\/ת החשבונות\]/g, accountantName);
+            // Also replace in the specific format used in the reminder letter
+            if (optionTitle.includes('למנהל/ת החשבונות')) {
+              optionTitle = `📋 ל${accountantName}`;
+            }
+            if (optionDetails.includes('שמנהל/ת החשבונות')) {
+              optionDetails = optionDetails.replace('שמנהל/ת החשבונות', `ש${accountantName}`);
+            }
+          }
+
+          return `
           <div class="option">
-            <div class="option-title">${option.title}</div>
-            <div class="option-details">${option.details}</div>
+            <div class="option-title">${optionTitle}</div>
+            <div class="option-details">${optionDetails}</div>
           </div>
-        `).join('')}
+        `}).join('')}
       </div>
-    `).join('');
+    `}).join('');
 
     const htmlContent = `<!DOCTYPE html>
 <html dir="rtl" lang="he">
@@ -370,7 +454,11 @@ const MeetingScheduler = () => {
         
         <div class="content">
             <div class="greeting">
-                שלום ${displayName} 👋
+                ${letterType === 'reminder'
+                  ? `<div>לכבוד: ${displayName}</div>
+                     ${accountantName ? `<div>ולכבוד: מנהל/ת החשבונות ${accountantName}</div>` : ''}
+                     <div style="margin-top: 15px;">שלום רב,</div>`
+                  : `שלום ${displayName} 👋`}
             </div>
             
             <div class="main-message">
@@ -456,7 +544,7 @@ const MeetingScheduler = () => {
             <label className="block text-sm font-medium text-gray-700 mb-2" style={{textAlign: 'right'}}>
               סוג המכתב *
             </label>
-            <div className="grid grid-cols-3 gap-2" style={{direction: 'rtl'}}>
+            <div className="grid grid-cols-2 gap-2" style={{direction: 'rtl'}}>
               <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
                 <input
                   type="radio"
@@ -492,6 +580,18 @@ const MeetingScheduler = () => {
                 <FileText className="w-3 h-3 text-purple-600" />
                 <span className="text-xs">מכתב כללי</span>
               </label>
+
+              <label className="flex items-center gap-1 p-1.5 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer" style={{flexDirection: 'row'}}>
+                <input
+                  type="radio"
+                  value="reminder"
+                  checked={letterType === 'reminder'}
+                  onChange={(e) => setLetterType(e.target.value)}
+                  className="scale-90"
+                />
+                <AlertCircle className="w-3 h-3 text-orange-600" />
+                <span className="text-xs">מכתב זירוז</span>
+              </label>
             </div>
           </div>
 
@@ -510,6 +610,24 @@ const MeetingScheduler = () => {
               style={{textAlign: 'right', direction: 'rtl'}}
             />
           </div>
+
+          {/* Accountant Name - Only for reminder letter */}
+          {letterType === 'reminder' && (
+          <div style={{textAlign: 'right'}}>
+            <label className="block text-sm font-medium text-gray-700 mb-2" style={{textAlign: 'right'}}>
+              שם מנהל/ת חשבונות *
+            </label>
+            <input
+              type="text"
+              value={accountantName}
+              onChange={(e) => setAccountantName(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              placeholder="הזן שם מנהל/ת החשבונות"
+              required
+              style={{textAlign: 'right', direction: 'rtl'}}
+            />
+          </div>
+          )}
 
           {/* Client Type */}
           <div style={{textAlign: 'right'}}>
@@ -607,6 +725,8 @@ const MeetingScheduler = () => {
               <p className="text-xs mb-1">
                 {!clientName ? (
                   <span className="text-red-600">⚠ יש להזין שם לקוח</span>
+                ) : (letterType === 'reminder' && !accountantName) ? (
+                  <span className="text-red-600">⚠ יש להזין שם מנהל/ת חשבונות</span>
                 ) : getLetterTypeConfig().needsMeetings ? (
                   getValidMeetingsCount() < 2 ? (
                     <span className="text-orange-600">⚠ יש להזין לפחות 2 מועדים</span>
@@ -621,7 +741,7 @@ const MeetingScheduler = () => {
             <button
               onClick={downloadHTML}
               className="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 flex items-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-              disabled={!clientName || (getLetterTypeConfig().needsMeetings && getValidMeetingsCount() < 2)}
+              disabled={!clientName || (letterType === 'reminder' && !accountantName) || (getLetterTypeConfig().needsMeetings && getValidMeetingsCount() < 2)}
             >
               <Download className="w-4 h-4" />
               יצור והורד קובץ HTML
