@@ -262,6 +262,9 @@ const MeetingScheduler = () => {
     const chooseText = letterConfig.needsMeetings ? `אנא ${config.chooseVerb} את המועד הכי נוח ${config.waitingText} ${config.updateVerb} אותי בהודעת וואטסאפ` : '';
     
     // Generate sections content
+    // Check if this is a reminder letter for clean styling
+    const isReminderLetter = letterType === 'reminder';
+
     const sectionsHtml = letterConfig.content.sections.map(section => {
       // Replace accountant name placeholders in the section title
       let sectionTitle = section.title;
@@ -305,9 +308,6 @@ const MeetingScheduler = () => {
         `}).join('')}
       </div>
     `}).join('');
-
-    // Check if this is a reminder letter for clean styling
-    const isReminderLetter = letterType === 'reminder';
 
     const htmlContent = `<!DOCTYPE html>
 <html dir="rtl" lang="he">
