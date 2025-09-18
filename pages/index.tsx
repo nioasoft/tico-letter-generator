@@ -490,13 +490,19 @@ const MeetingScheduler = () => {
         </div>
         
         <div class="footer">
-            <div style="font-size: 18px; margin-bottom: 10px;">
-                🚀 בואו נחווה יחד את המהפכה הדיגיטלית
-            </div>
-            <div>
-                <strong>סיגל וצוות המשרד החדשני</strong><br>
-                מצפים לראות אתכם! 🌟
-            </div>
+            ${letterType === 'reminder'
+              ? `<div>
+                   תודה על שיתוף הפעולה,<br>
+                   <strong>צוות המשרד TICO FRANCO & CO</strong>
+                 </div>`
+              : `<div style="font-size: 18px; margin-bottom: 10px;">
+                   🚀 בואו נחווה יחד את המהפכה הדיגיטלית
+                 </div>
+                 <div>
+                   <strong>סיגל וצוות המשרד החדשני</strong><br>
+                   מצפים לראות אתכם! 🌟
+                 </div>`
+            }
         </div>
     </div>
 </body>
