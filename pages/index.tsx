@@ -561,7 +561,7 @@ const MeetingScheduler = () => {
             page-break-inside: avoid;
           }
           @page {
-            margin: 10mm;
+            margin: 1in 10mm; /* 1 inch top/bottom, 10mm left/right */
             size: A4;
           }
         }
