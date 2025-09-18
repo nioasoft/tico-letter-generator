@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, Users, User, FileText, Download, Building, Building2, AlertCircle, FileDown } from 'lucide-react';
 import Head from 'next/head';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+// PDF generation will use browser's print functionality instead of jsPDF
 
 const MeetingScheduler = () => {
   const [clientName, setClientName] = useState('');
@@ -520,62 +519,77 @@ const MeetingScheduler = () => {
     URL.revokeObjectURL(url);
   };
 
-  const downloadPDF = async () => {
+  const downloadPDF = () => {
     const htmlContent = generateHTML();
     const letterConfig = getLetterTypeConfig();
 
-    // Create a temporary container
-    const container = document.createElement('div');
-    container.innerHTML = htmlContent;
-    container.style.position = 'absolute';
-    container.style.left = '-9999px';
-    container.style.width = '794px'; // A4 width in pixels at 96 DPI
-    document.body.appendChild(container);
+    // Create a hidden iframe for printing
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'absolute';
+    iframe.style.left = '-9999px';
+    iframe.style.width = '210mm';
+    iframe.style.height = '297mm';
+    document.body.appendChild(iframe);
 
-    try {
-      // Generate canvas from HTML
-      const canvas = await html2canvas(container, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        windowWidth: 794
-      });
+    // Write content to iframe
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
-      // Create PDF
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
-      });
+    // Add print-specific styles
+    const printStyles = `
+      <style>
+        @media print {
+          body {
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
+          .container {
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 20px !important;
+            box-shadow: none !important;
+            border: none !important;
+          }
+          .header, .footer {
+            page-break-inside: avoid;
+          }
+          @page {
+            margin: 10mm;
+            size: A4;
+          }
+        }
+        @media screen {
+          body {
+            margin: 0;
+            padding: 20px;
+          }
+        }
+      </style>
+    `;
 
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 297; // A4 height in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
+    // Combine HTML with print styles
+    const fullHTML = htmlContent.replace('</head>', printStyles + '</head>');
+    iframeDoc.open();
+    iframeDoc.write(fullHTML);
+    iframeDoc.close();
 
-      // Add first page
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+    // Wait for content to load then print
+    setTimeout(() => {
+      try {
+        // Focus on iframe and print
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
 
-      // Add additional pages if needed
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+        // Remove iframe after a delay to allow print dialog to open
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+        }, 1000);
+      } catch (error) {
+        console.error('Error printing:', error);
+        alert('שגיאה ביצירת PDF. אנא בחר "Save as PDF" בחלון ההדפסה.');
       }
-
-      // Save the PDF
-      pdf.save(`${clientName} - ${letterConfig.filename}.pdf`);
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert('שגיאה ביצירת PDF. אנא נסה שוב.');
-    } finally {
-      // Clean up
-      document.body.removeChild(container);
-    }
+    }, 500);
   };
 
   const getValidMeetingsCount = () => meetings.filter(m => m.date && m.time).length;
