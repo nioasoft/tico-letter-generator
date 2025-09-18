@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Calendar, Clock, Users, User, FileText, Download, Building, Building2, AlertCircle } from 'lucide-react';
+import { Calendar, Clock, Users, User, FileText, Download, Building, Building2, AlertCircle, FileDown } from 'lucide-react';
 import Head from 'next/head';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const MeetingScheduler = () => {
   const [clientName, setClientName] = useState('');
@@ -184,7 +186,7 @@ const MeetingScheduler = () => {
           needsMeetings: false,
           content: {
             greeting: `תזכורת נוספת – לקבלת מסמכי וגיבוי הנהלת חשבונות לשנת המס 2024 לצורך ביקורת ועריכת הדוחות הכספיים המבוקרים`,
-            mainMessage: `בהמשך לפנייתנו הקודמות אליכם בקשר לעניין שבנדון, אנו מזכירים ${clientConfig.waitingText} בזאת כי עדיין לא התקבל במשרדנו החומר הדרוש לביקורת ועריכת ${clientConfig.reportsText} לשנת המס 2024.<br><br>
+            mainMessage: `בהמשך לפנייתנו הקודמות אליכם בקשר לעניין שבנדון, אנו מזכירים ${clientConfig.waitingText} בזאת כי עדיין לא התקבל במשרדנו החומר הדרוש לביקורת ועריכת הדוחות הכספיים המבוקרים לשנת המס 2024.<br><br>
                          לנוכח העובדה שאנו נמצאים כבר בחודשים האחרונים של שנת המס 2025, עלול להיווצר עיכוב משמעותי שיגרום לקושי עבור${clientConfig.titleSuffix} ועבורנו להשלים במהירות את עבודת הביקורת ועריכת הדוחות הכספיים המבוקרים לשנת המס 2024.<br><br>
                          ככל שתמהרו להמציא לנו את מסמכי הנהלת החשבונות לשנת המס 2024 כך נוכל למהר ולסיים את עבודת הביקורת והעריכה.`,
             sections: [
@@ -204,10 +206,10 @@ const MeetingScheduler = () => {
                 options: [
                   {
                     title: '👥 בעלי המניות',
-                    details: `• אנא וודאו שמנהל/ת החשבונות מעביר/ה אלינו את כל הנדרש`
+                    details: `• אנא וודאו ש${accountantName || '[שם מנהלת החשבונות]'} מעבירה אלינו את כל הנדרש`
                   },
                   {
-                    title: `📋 למנהל/ת החשבונות`,
+                    title: `📋 ל${accountantName || '[שם מנהלת החשבונות]'}`,
                     details: `• אנא העבירי במהירות האפשרית את קבצי הנהלת החשבונות הדיגיטליים<br>
                              • צרפי את כל מסמכי הראיות הנדרשים לביקורת<br>
                              • לאחר העברת החומר, אנא הודיעי לתיקו ושני על כך`
@@ -283,11 +285,11 @@ const MeetingScheduler = () => {
             optionTitle = optionTitle.replace('[שם מנהל/ת החשבונות]', accountantName);
             optionDetails = optionDetails.replace(/\[שם מנהל\/ת החשבונות\]/g, accountantName);
             // Also replace in the specific format used in the reminder letter
-            if (optionTitle.includes('למנהל/ת החשבונות')) {
+            if (optionTitle.includes('למנהלת החשבונות')) {
               optionTitle = `📋 ל${accountantName}`;
             }
-            if (optionDetails.includes('שמנהל/ת החשבונות')) {
-              optionDetails = optionDetails.replace('שמנהל/ת החשבונות', `ש${accountantName}`);
+            if (optionDetails.includes('שמנהלת החשבונות')) {
+              optionDetails = optionDetails.replace('שמנהלת החשבונות', `ש${accountantName}`);
             }
           }
 
@@ -456,7 +458,7 @@ const MeetingScheduler = () => {
             <div class="greeting">
                 ${letterType === 'reminder'
                   ? `<div>לכבוד: ${displayName}</div>
-                     ${accountantName ? `<div>ולכבוד: מנהל/ת החשבונות ${accountantName}</div>` : ''}
+                     ${accountantName ? `<div>ולכבוד: מנהלת החשבונות ${accountantName}</div>` : ''}
                      <div style="margin-top: 15px;">שלום רב,</div>`
                   : `שלום ${displayName} 👋`}
             </div>
@@ -516,6 +518,64 @@ const MeetingScheduler = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  };
+
+  const downloadPDF = async () => {
+    const htmlContent = generateHTML();
+    const letterConfig = getLetterTypeConfig();
+
+    // Create a temporary container
+    const container = document.createElement('div');
+    container.innerHTML = htmlContent;
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+    container.style.width = '794px'; // A4 width in pixels at 96 DPI
+    document.body.appendChild(container);
+
+    try {
+      // Generate canvas from HTML
+      const canvas = await html2canvas(container, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        windowWidth: 794
+      });
+
+      // Create PDF
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 297; // A4 height in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // Add first page
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      // Add additional pages if needed
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      // Save the PDF
+      pdf.save(`${clientName} - ${letterConfig.filename}.pdf`);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('שגיאה ביצירת PDF. אנא נסה שוב.');
+    } finally {
+      // Clean up
+      document.body.removeChild(container);
+    }
   };
 
   const getValidMeetingsCount = () => meetings.filter(m => m.date && m.time).length;
@@ -615,14 +675,14 @@ const MeetingScheduler = () => {
           {letterType === 'reminder' && (
           <div style={{textAlign: 'right'}}>
             <label className="block text-sm font-medium text-gray-700 mb-2" style={{textAlign: 'right'}}>
-              שם מנהל/ת חשבונות *
+              שם מנהלת חשבונות *
             </label>
             <input
               type="text"
               value={accountantName}
               onChange={(e) => setAccountantName(e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-              placeholder="הזן שם מנהל/ת החשבונות"
+              placeholder="הזן שם מנהלת החשבונות"
               required
               style={{textAlign: 'right', direction: 'rtl'}}
             />
@@ -719,14 +779,14 @@ const MeetingScheduler = () => {
           </div>
           )}
 
-          {/* Generate Button and Validation */}
-          <div className="flex flex-col items-center gap-1">
+          {/* Generate Buttons and Validation */}
+          <div className="flex flex-col items-center gap-2">
             <div className="text-center">
               <p className="text-xs mb-1">
                 {!clientName ? (
                   <span className="text-red-600">⚠ יש להזין שם לקוח</span>
                 ) : (letterType === 'reminder' && !accountantName) ? (
-                  <span className="text-red-600">⚠ יש להזין שם מנהל/ת חשבונות</span>
+                  <span className="text-red-600">⚠ יש להזין שם מנהלת חשבונות</span>
                 ) : getLetterTypeConfig().needsMeetings ? (
                   getValidMeetingsCount() < 2 ? (
                     <span className="text-orange-600">⚠ יש להזין לפחות 2 מועדים</span>
@@ -738,14 +798,24 @@ const MeetingScheduler = () => {
                 )}
               </p>
             </div>
-            <button
-              onClick={downloadHTML}
-              className="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 flex items-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-              disabled={!clientName || (letterType === 'reminder' && !accountantName) || (getLetterTypeConfig().needsMeetings && getValidMeetingsCount() < 2)}
-            >
-              <Download className="w-4 h-4" />
-              יצור והורד קובץ HTML
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={downloadHTML}
+                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 flex items-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                disabled={!clientName || (letterType === 'reminder' && !accountantName) || (getLetterTypeConfig().needsMeetings && getValidMeetingsCount() < 2)}
+              >
+                <Download className="w-4 h-4" />
+                יצור והורד HTML
+              </button>
+              <button
+                onClick={downloadPDF}
+                className="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg font-medium hover:from-green-700 hover:to-emerald-700 transition-all duration-200 flex items-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                disabled={!clientName || (letterType === 'reminder' && !accountantName) || (getLetterTypeConfig().needsMeetings && getValidMeetingsCount() < 2)}
+              >
+                <FileDown className="w-4 h-4" />
+                יצור והורד PDF
+              </button>
+            </div>
           </div>
         </div>
       </div>
