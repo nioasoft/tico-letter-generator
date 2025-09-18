@@ -272,7 +272,7 @@ const MeetingScheduler = () => {
       return `
       <div class="section">
         <div class="section-title">
-          <span class="emoji">🚀</span>
+          ${!isReminderLetter ? '<span class="emoji">🚀</span>' : ''}
           ${sectionTitle}
         </div>
         ${section.options.map(option => {
@@ -292,6 +292,11 @@ const MeetingScheduler = () => {
             }
           }
 
+          // Remove emojis for reminder letter
+          if (isReminderLetter) {
+            optionTitle = optionTitle.replace(/[\u{1F300}-\u{1FAD6}]/gu, '').trim();
+          }
+
           return `
           <div class="option">
             <div class="option-title">${optionTitle}</div>
@@ -301,6 +306,9 @@ const MeetingScheduler = () => {
       </div>
     `}).join('');
 
+    // Check if this is a reminder letter for clean styling
+    const isReminderLetter = letterType === 'reminder';
+
     const htmlContent = `<!DOCTYPE html>
 <html dir="rtl" lang="he">
 <head>
@@ -309,34 +317,39 @@ const MeetingScheduler = () => {
     <title>הזמנה לפגישה - משרד רואי חשבון</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
+            font-family: ${isReminderLetter ?
+              "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, 'Helvetica Neue', Arial, sans-serif" :
+              "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif"};
+            line-height: ${isReminderLetter ? '1.7' : '1.6'};
             margin: 0;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: ${isReminderLetter ? '40px 20px' : '15px'};
+            background: ${isReminderLetter ? '#ffffff' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
             min-height: 100vh;
             direction: rtl;
             text-align: right;
+            ${isReminderLetter ? 'color: #1d1d1f;' : ''}
         }
         .container {
-            max-width: 600px;
+            max-width: ${isReminderLetter ? '650px' : '600px'};
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: ${isReminderLetter ? '0' : '20px'};
+            box-shadow: ${isReminderLetter ? 'none' : '0 20px 40px rgba(0,0,0,0.1)'};
             overflow: hidden;
-            border: 1px solid #e5e7eb;
+            border: ${isReminderLetter ? 'none' : '1px solid #e5e7eb'};
             direction: rtl;
             text-align: right;
         }
         .header {
-            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            color: white;
-            padding: 18px;
-            text-align: center;
+            background: ${isReminderLetter ? '#ffffff' : 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)'};
+            color: ${isReminderLetter ? '#1d1d1f' : 'white'};
+            padding: ${isReminderLetter ? '30px 40px' : '18px'};
+            text-align: ${isReminderLetter ? 'right' : 'center'};
             position: relative;
             overflow: hidden;
+            ${isReminderLetter ? 'border-bottom: 1px solid #d2d2d7;' : ''}
         }
+        ${!isReminderLetter ? `
         .header::before {
             content: '';
             position: absolute;
@@ -350,74 +363,80 @@ const MeetingScheduler = () => {
         @keyframes pulse {
             0%, 100% { transform: scale(1); opacity: 0.3; }
             50% { transform: scale(1.1); opacity: 0.1; }
-        }
+        }` : ''}
         .header h1 {
             margin: 0;
-            font-size: 24px;
-            font-weight: 700;
+            font-size: ${isReminderLetter ? '20px' : '24px'};
+            font-weight: ${isReminderLetter ? '600' : '700'};
             position: relative;
             z-index: 1;
+            ${isReminderLetter ? 'letter-spacing: -0.02em;' : ''}
         }
         .content {
-            padding: 20px;
+            padding: ${isReminderLetter ? '40px' : '20px'};
             direction: rtl;
             text-align: right;
         }
         .greeting {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 15px;
-            text-align: center;
+            font-size: ${isReminderLetter ? '16px' : '18px'};
+            font-weight: ${isReminderLetter ? '400' : '600'};
+            color: ${isReminderLetter ? '#1d1d1f' : '#1f2937'};
+            margin-bottom: ${isReminderLetter ? '30px' : '15px'};
+            text-align: ${isReminderLetter ? 'right' : 'center'};
+            ${isReminderLetter ? 'line-height: 1.8;' : ''}
         }
         .main-message {
-            background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 20%, #f59e0b 100%);
-            padding: 15px;
-            border-radius: 12px;
-            margin: 15px 0;
-            border-right: 4px solid #d97706;
-            box-shadow: 0 3px 5px rgba(0,0,0,0.05);
+            background: ${isReminderLetter ? '#f5f5f7' : 'linear-gradient(135deg, #fef3c7 0%, #fcd34d 20%, #f59e0b 100%)'};
+            padding: ${isReminderLetter ? '25px' : '15px'};
+            border-radius: ${isReminderLetter ? '8px' : '12px'};
+            margin: ${isReminderLetter ? '30px 0' : '15px 0'};
+            border-right: ${isReminderLetter ? 'none' : '4px solid #d97706'};
+            border-left: ${isReminderLetter ? '3px solid #86868b' : 'none'};
+            box-shadow: ${isReminderLetter ? 'none' : '0 3px 5px rgba(0,0,0,0.05)'};
             text-align: right;
         }
         .section {
-            margin: 20px 0;
-            padding: 15px;
-            background: #f9fafb;
-            border-radius: 10px;
-            border: 1px solid #e5e7eb;
+            margin: ${isReminderLetter ? '35px 0' : '20px 0'};
+            padding: ${isReminderLetter ? '0' : '15px'};
+            background: ${isReminderLetter ? 'transparent' : '#f9fafb'};
+            border-radius: ${isReminderLetter ? '0' : '10px'};
+            border: ${isReminderLetter ? 'none' : '1px solid #e5e7eb'};
             text-align: right;
         }
         .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1e40af;
-            margin-bottom: 12px;
-            display: flex;
+            font-size: ${isReminderLetter ? '17px' : '16px'};
+            font-weight: ${isReminderLetter ? '600' : '700'};
+            color: ${isReminderLetter ? '#1d1d1f' : '#1e40af'};
+            margin-bottom: ${isReminderLetter ? '20px' : '12px'};
+            display: ${isReminderLetter ? 'block' : 'flex'};
             align-items: center;
             gap: 6px;
             text-align: right;
+            ${isReminderLetter ? 'border-bottom: 1px solid #d2d2d7; padding-bottom: 10px;' : ''}
         }
         .option {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            margin: 8px 0;
-            border-right: 3px solid #10b981;
-            box-shadow: 0 2px 3px rgba(0,0,0,0.05);
+            background: ${isReminderLetter ? '#ffffff' : 'white'};
+            padding: ${isReminderLetter ? '20px 0' : '12px'};
+            border-radius: ${isReminderLetter ? '0' : '8px'};
+            margin: ${isReminderLetter ? '25px 0' : '8px 0'};
+            border-right: ${isReminderLetter ? 'none' : '3px solid #10b981'};
+            box-shadow: ${isReminderLetter ? 'none' : '0 2px 3px rgba(0,0,0,0.05)'};
             text-align: right;
+            ${isReminderLetter ? 'border-bottom: 1px solid #f5f5f7;' : ''}
         }
         .option-title {
-            font-weight: 600;
-            color: #065f46;
-            font-size: 15px;
-            margin-bottom: 6px;
+            font-weight: ${isReminderLetter ? '500' : '600'};
+            color: ${isReminderLetter ? '#1d1d1f' : '#065f46'};
+            font-size: ${isReminderLetter ? '16px' : '15px'};
+            margin-bottom: ${isReminderLetter ? '12px' : '6px'};
             text-align: right;
         }
         .option-details {
-            color: #374151;
-            font-size: 13px;
-            line-height: 1.4;
+            color: ${isReminderLetter ? '#424245' : '#374151'};
+            font-size: ${isReminderLetter ? '14px' : '13px'};
+            line-height: ${isReminderLetter ? '1.7' : '1.4'};
             text-align: right;
+            ${isReminderLetter ? 'padding-right: 20px;' : ''}
         }
         .meetings-section {
             background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
@@ -428,29 +447,41 @@ const MeetingScheduler = () => {
             text-align: right;
         }
         .footer {
-            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
-            color: white;
-            padding: 18px;
-            text-align: center;
-            font-weight: 600;
+            background: ${isReminderLetter ? '#ffffff' : 'linear-gradient(135deg, #374151 0%, #1f2937 100%)'};
+            color: ${isReminderLetter ? '#1d1d1f' : 'white'};
+            padding: ${isReminderLetter ? '40px' : '18px'};
+            text-align: ${isReminderLetter ? 'right' : 'center'};
+            font-weight: ${isReminderLetter ? '400' : '600'};
+            ${isReminderLetter ? 'border-top: 1px solid #d2d2d7; margin-top: 40px;' : ''}
         }
         .highlight {
-            background: linear-gradient(120deg, #fbbf24 0%, #f59e0b 100%);
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-weight: 600;
-            color: #92400e;
+            background: ${isReminderLetter ? 'transparent' : 'linear-gradient(120deg, #fbbf24 0%, #f59e0b 100%)'};
+            padding: ${isReminderLetter ? '0' : '2px 8px'};
+            border-radius: ${isReminderLetter ? '0' : '6px'};
+            font-weight: ${isReminderLetter ? '600' : '600'};
+            color: ${isReminderLetter ? '#1d1d1f' : '#92400e'};
         }
         .emoji {
-            font-size: 1.2em;
+            font-size: ${isReminderLetter ? '0' : '1.2em'};
             margin: 0 3px;
+            ${isReminderLetter ? 'display: none;' : ''}
         }
+        ${isReminderLetter ? `
+        strong {
+            font-weight: 600;
+            color: #000000;
+        }
+        .option-details strong {
+            background-color: #fef2c8;
+            padding: 1px 4px;
+            border-radius: 3px;
+        }` : ''}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>${letterConfig.title}</h1>
+            <h1>${isReminderLetter ? letterConfig.title.replace('⚠️ ', '') : letterConfig.title}</h1>
         </div>
         
         <div class="content">
@@ -463,10 +494,10 @@ const MeetingScheduler = () => {
             </div>
             
             <div class="main-message">
-                <div style="font-size: 18px; font-weight: 700; color: #92400e; margin-bottom: 10px;">
-                    🚀 ${letterConfig.content.greeting}
+                <div style="font-size: ${isReminderLetter ? '16px' : '18px'}; font-weight: ${isReminderLetter ? '600' : '700'}; color: ${isReminderLetter ? '#1d1d1f' : '#92400e'}; margin-bottom: ${isReminderLetter ? '15px' : '10px'};">
+                    ${isReminderLetter ? '' : '🚀 '}${letterConfig.content.greeting}
                 </div>
-                <div style="font-size: 16px; color: #451a03;">
+                <div style="font-size: ${isReminderLetter ? '15px' : '16px'}; color: ${isReminderLetter ? '#424245' : '#451a03'}; line-height: ${isReminderLetter ? '1.7' : '1.6'};">
                     ${letterConfig.content.mainMessage}
                 </div>
             </div>
